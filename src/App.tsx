@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
-import GlobalStyles from './GlobalStyles';
-import { theme } from './theme';
+import GlobalStyles from './styles/GlobalStyles';
+import theme from './styles/theme';
 import Router from './Router';
 
 function App() {

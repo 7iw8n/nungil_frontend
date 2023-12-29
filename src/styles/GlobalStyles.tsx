@@ -24,6 +24,9 @@ const GlobalStyles = () => (
         background-color: none;
         border: none;
       }
+      svg {
+        cursor: pointer;
+      }
     `}
   />
 );
