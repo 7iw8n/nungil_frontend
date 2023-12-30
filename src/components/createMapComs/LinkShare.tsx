@@ -1,16 +1,14 @@
 import { imgLinkShare } from '../../assets/imgs';
 import theme from '../../styles/theme';
-import { useState } from 'react';
 
-const LinkShare = () => {
-  const [changeContent, setChangeContent] = useState('');
-
+const LinkShare: React.FC<{ userId: number }> = ({ userId }) => {
+  const url = `http://localhost:5173/${userId}`;
   //서버통신
 
   const handleCopyClipBoard = async () => {
-    const text = changeContent; // 복사할 url
+    // 복사할 url
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(url);
     } catch (err) {
       console.log(err);
     }
@@ -37,10 +35,11 @@ const LinkShare = () => {
           alignItems: 'center',
           fontSize: '1.4rem',
           color: theme.colors.Gray6,
+          cursor: 'pointer',
         }}
         onClick={handleCopyClipBoard}
       >
-        링크
+        {url}
       </div>
       <img src={imgLinkShare} alt="박스를 누르면 복사가 돼요!" css={{ width: '14rem' }} />
     </div>

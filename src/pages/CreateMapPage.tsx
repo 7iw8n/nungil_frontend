@@ -1,13 +1,55 @@
 import styled from '@emotion/styled';
 import { IconArrowLeft } from '../assets/svgs/index.ts';
 import { CREATEMAP } from '../constants/CREATEMAP.ts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import InputNickname from '../components/createMapComs/InputNickname.tsx';
 import InputPlaceTheme from '../components/createMapComs/InputPlaceTheme.tsx';
 import LinkShare from '../components/createMapComs/LinkShare.tsx';
+import { useGeoLocation } from '../hooks/useGeoLocation.ts';
+import { api } from '../apis/axiosInstance.ts';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { UserName, PlaceTheme } from '../states/createMapState.ts';
+import { UserId } from '../states/userState.ts';
+import { useNavigate } from 'react-router-dom';
+
+interface UserInfoType {
+  latitude: number;
+  longitude: number;
+  placeTheme: string;
+  userName: string;
+}
+
+interface ApiResponse {
+  userId: number;
+}
+
+const geolocationOptions = {
+  enableHighAccuracy: true,
+  timeout: 1000 * 10,
+  maximumAge: 1000 * 3600 * 24,
+};
 
 const CreateMapPage = () => {
   const [stage, setStage] = useState(1);
+  const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
+  const { location, error } = useGeoLocation(geolocationOptions); //현재 위치 가져오기
+  const userName = useRecoilValue(UserName);
+  const placeTheme = useRecoilValue(PlaceTheme);
+  const [userId, setUserId] = useRecoilState(UserId);
+
+  const navigator = useNavigate();
+
+  useEffect(() => {
+    if (location && location.latitude && location.longitude) {
+      const newUserInfo: UserInfoType = {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        placeTheme: placeTheme,
+        userName: userName,
+      };
+      setUserInfo(newUserInfo);
+    }
+  }, [location, userName, placeTheme]);
 
   const renderStageComponent = () => {
     switch (stage) {
@@ -16,10 +58,25 @@ const CreateMapPage = () => {
       case 2:
         return <InputPlaceTheme />;
       case 3:
-        return <LinkShare />;
+        return <LinkShare userId={userId} />;
       default:
         return null;
     }
+  };
+
+  const postUserInfo = async () => {
+    if (!userInfo) {
+      console.error('위치 정보가 아직 불러와지지 않았습니다.');
+      return;
+    }
+    console.log(userInfo);
+
+    try {
+      const { data } = await api.post<ApiResponse>('/api/user/register', userInfo);
+      const { userId } = data;
+      setUserId(userId);
+      setStage(stage + 1);
+    } catch {}
   };
 
   return (
@@ -27,7 +84,9 @@ const CreateMapPage = () => {
       <St.TopSection
         onClick={(e) => {
           e.preventDefault();
-          setStage(stage - 1);
+          if (stage > 1) {
+            setStage(stage - 1);
+          }
         }}
       >
         <IconArrowLeft />
@@ -47,10 +106,18 @@ const CreateMapPage = () => {
         <St.Button
           onClick={(e) => {
             e.preventDefault();
-            setStage(stage + 1);
+            if (stage === 1) {
+              userName ? setStage(stage + 1) : {};
+            }
+            if (stage === 2) {
+              placeTheme ? postUserInfo() : {};
+            }
+            if (stage === 3) {
+              navigator(`/${userId}`);
+            }
           }}
         >
-          다음으로
+          {CREATEMAP[stage].button}
         </St.Button>
       </St.BottomSection>
     </St.Container>

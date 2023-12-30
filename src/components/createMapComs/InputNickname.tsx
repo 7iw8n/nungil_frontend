@@ -1,10 +1,13 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
+import { useRecoilState } from 'recoil';
+import { UserName } from '../../states/createMapState';
 
 const InputNickname = () => {
-  const [name, setName] = useState('');
+  const [name, setName] = useRecoilState(UserName);
 
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     const updatedName = event.target.value.replace(/\s+/g, '').slice(0, 8);
     setName(updatedName);
   };
@@ -31,6 +34,7 @@ const St = {
     width: 100%;
     height: 4.5rem;
     padding: 1rem 1.5rem;
+    margin: 1rem 0;
     border-radius: 10px;
     border: 1px solid #f1f1f1;
     background: #fafafa;
