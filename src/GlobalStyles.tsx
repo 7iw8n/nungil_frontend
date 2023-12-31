@@ -2,6 +2,15 @@
 import { Global, css } from '@emotion/react';
 
 const reset = css`
+  html {
+    width: 100%;
+    max-height: 852px;
+    display: flex;
+    justify-content: center;
+  }
+  a {
+    text-decoration: none;
+  }
   html,
   body,
   div,
@@ -133,10 +142,10 @@ const GlobalStyles = () => (
     styles={css`
       ${reset}
 
-      /* @font-face {
-        font-family: ;
+      @font-face {
+        font-family: 'Pretendard';
         src: url();
-      } */
+      }
 
       * {
         box-sizing: border-box;
@@ -146,6 +155,10 @@ const GlobalStyles = () => (
         &:hover {
           cursor: pointer;
         }
+      }
+      input {
+        border: none;
+        outline: none;
       }
     `}
   />
