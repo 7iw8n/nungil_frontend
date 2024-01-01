@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
+import FinishModal from '../components/FinishModal';
 import arrow from '../assets/imgs/ArrowLeft.png';
 
 const container = css`
   width: 393px;
   height: 100vh;
   background: #ffffff;
+  z-index: 1;
+  position: relative;
 `;
 
 const top = css`
@@ -66,6 +70,7 @@ const detail = css`
 `;
 
 const bottom = css`
+  width: 100%;
   height: 11%;
   padding-left: 28px;
   padding-bottom: 27px;
@@ -85,11 +90,41 @@ const bottombtn = css`
   font-weight: 700;
 `;
 
-const PlaceName = () => {
+const modalbox = css`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background-color: #ffffff;
+  border-radius: 26px;
+`;
+
+const overlay = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+`;
+
+const Nickname = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleFinishClick = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   return (
-    <div css={container} className="PlaceName">
+    <div css={container} className="Nickname">
       <div css={top} className="Top">
-        <Link to="/Map">
+        <Link to="/QuizQ">
           <button css={backbtn}>
             <img src={arrow} />
           </button>
@@ -97,24 +132,34 @@ const PlaceName = () => {
       </div>
       <div css={middle} className="Middle">
         <div css={title} className="Title">
-          <span>장소의 이름을 정해주세요</span>
+          <span>닉네임 입력하기</span>
         </div>
         <div css={subtitle} className="Subtitle">
-          <span>지정하신 장소를 부를 이름을 정해주세요.</span>
+          <span>장소를 추천할 때 쓰일 닉네임을 입력해주세요.</span>
           <br />
-          <span>ex. 숭실대 조만식기념관 옆 나무계단</span>
+          <span>입력하신 닉네임은 타인에게 보이게 돼요.</span>
         </div>
-        <input type="text" css={inputbox} placeholder="장소의 이름을 입력하세요." />
+        <input type="text" css={inputbox} placeholder="닉네임을 입력하세요." />
         <br />
-        <span css={detail}>*정해주신 장소의 이름이 지도 상에서 보이게 돼요.</span>
+        <span css={detail}>*최대 8자까지</span>
       </div>
       <div css={bottom} className="Bottom">
-        <Link to="/Phrase">
-          <button css={bottombtn}>다음으로</button>
-        </Link>
+        <button css={bottombtn} onClick={handleFinishClick}>
+          장소 선물 완료하기
+        </button>
+        <div className="Modal">
+          {modalOpen && (
+            <>
+              <div css={overlay} onClick={closeModal} />
+              <div css={modalbox} className="ModalBox">
+                <FinishModal setModalOpen={setModalOpen} />
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default PlaceName;
+export default Nickname;

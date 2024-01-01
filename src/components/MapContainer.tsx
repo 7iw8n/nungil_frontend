@@ -8,12 +8,17 @@ declare global {
   }
 }
 
+interface MapContainerProps {
+  onMapLoad: (map: any) => void;
+  setMap: (map: any) => void;
+}
+
 const container = css`
   width: 100%;
   height: 100%;
 `;
 
-export default function MapContainer() {
+export default function MapContainer({ onMapLoad, setMap }: MapContainerProps) {
   useEffect(() => {
     const mapScript = document.createElement('script');
 
@@ -32,10 +37,15 @@ export default function MapContainer() {
           level: 3,
         };
         const map = new window.kakao.maps.Map(mapContainer, mapOption);
+        setMap(map);
+
+        if (onMapLoad) {
+          onMapLoad(map);
+        }
       });
     };
     mapScript.addEventListener('load', onLoadKakaoMap);
-  }, []);
+  }, [onMapLoad, setMap]);
 
   return <div id="map" css={container} />;
 }

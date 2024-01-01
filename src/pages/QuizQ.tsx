@@ -111,8 +111,8 @@ const QuizQ = () => {
         </div>
       </div>
       <div css={bottom} className="Bottom">
-        <Link to="/">
-          <button css={bottombtn}>장소 선물 완료하기</button>
+        <Link to="/Nickname">
+          <button css={bottombtn}>다음으로</button>
         </Link>
       </div>
     </div>

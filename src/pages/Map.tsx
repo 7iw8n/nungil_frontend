@@ -7,6 +7,7 @@ const container = css`
   width: 393px;
   height: 100vh;
   background: #ffffff;
+  position: relative;
 `;
 
 const top = css`
@@ -34,30 +35,37 @@ const title = css`
 `;
 
 const middle = css`
-  height: 65%;
+  height: 92%;
   color: #262626;
   font-size: 24px;
   font-weight: 700;
+  position: relative;
+  z-index: 1;
 `;
 
 const bottom = css`
   height: 27%;
   padding-left: 28px;
-  padding-top: 31px;
-  padding-bottom: 27px;
   border-radius: 20px 20px 0px 0px;
   flex-shrink: 0;
+  background-color: #ffffff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
 `;
 
 const bottomtitle = css`
   color: #262626;
   font-size: 18px;
   font-weight: 600;
-  padding-bottom: 16px;
+  padding-top: 40px;
+  padding-bottom: 30px;
 `;
 
 const addressbox = css`
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 `;
 
 const address = css`
@@ -116,7 +124,7 @@ const Map = () => {
           <input css={address}></input>
         </div>
         <div className="BottomBtn">
-          <Link to="/Phrase">
+          <Link to="/PlaceName">
             <button css={bottombtn}>이 위치로 정할게요</button>
           </Link>
         </div>
