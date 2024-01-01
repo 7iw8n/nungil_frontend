@@ -5,6 +5,7 @@ import MapContainer from '../components/MapContainer';
 import StartModal from '../components/StartModal';
 import add from '../assets/imgs/AddBox.png';
 import location from '../assets/imgs/Location.png';
+import BeginningModal from '../components/BeginningModal';
 
 const container = css`
   width: 393px;
@@ -82,6 +83,7 @@ const overlay = css`
 const MainPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [map, setMap] = useState<any>(null);
+  const [showBeginningModal, setShowBeginningModal] = useState(true);
 
   const handleAddBoxClick = () => {
     setModalOpen(true);
@@ -128,6 +130,9 @@ const MainPage = () => {
             </>
           )}
         </div>
+        {showBeginningModal && (
+          <BeginningModal setShowModal={setShowBeginningModal} placeProvider="숭멋사" />
+        )}
       </div>
     </div>
   );

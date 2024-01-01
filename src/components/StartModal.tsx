@@ -35,11 +35,11 @@ const subtitle = css`
 `;
 
 const middletitle = css`
-padding-bottom: 9px;
-color: #505050
-font-size: 15px;
-font-weight: 700;
-letter-spacing: -0.5px;
+  padding-bottom: 9px;
+  color: #505050;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 `;
 
 const middlecon = css`

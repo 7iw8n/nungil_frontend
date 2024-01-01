@@ -11,6 +11,7 @@ import QuizA from './pages/QuizA';
 import QuizQ from './pages/QuizQ';
 import MainPage from './pages/MainPage';
 import Nickname from './pages/Nickname';
+import BeginningModal from './components/BeginningModal';
 
 const Router = () => {
   return (
@@ -25,6 +26,7 @@ const Router = () => {
     >
       <div
         css={{
+          position: 'relative',
           width: '100vw',
           maxWidth: '450px',
           height: '100vh',
