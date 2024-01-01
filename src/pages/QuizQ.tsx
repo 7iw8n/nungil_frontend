@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
-import arrow from '../assets/imgs/ArrowLeft.png';
+import { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { PresentPlaceInfo } from '../states/presentMapState';
+import arrow from '../assets/imgs/ArrowLeft.png';
 
 const container = css`
   width: 393px;
@@ -81,6 +84,27 @@ const bottombtn = css`
 `;
 
 const QuizQ = () => {
+  const [, setPresentQuiz] = useRecoilState(PresentPlaceInfo);
+  const [, setPresentAnswer] = useRecoilState(PresentPlaceInfo);
+
+  const handleQInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const updatedQuiz = event.target.value;
+    setPresentQuiz((prevPlaceInfo) => ({
+      ...prevPlaceInfo,
+      quiz: updatedQuiz,
+    }));
+  };
+
+  const handleAInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const updatedAnswer = event.target.value;
+    setPresentAnswer((prevPlaceInfo) => ({
+      ...prevPlaceInfo,
+      quizAnswer: updatedAnswer,
+    }));
+  };
+
   return (
     <div css={container} className="Quiz">
       <div css={top} className="Top">
@@ -102,16 +126,26 @@ const QuizQ = () => {
         <div className="QuizBox">
           <div className="Question">
             <span css={subtitle}>문제</span>
-            <input type="text" css={inputbox} placeholder="문제를 입력하세요." />
+            <input
+              type="text"
+              css={inputbox}
+              placeholder="문제를 입력하세요."
+              onChange={handleQInput}
+            />
           </div>
           <div className="Answer">
             <span css={subtitle}>정답</span>
-            <input type="text" css={inputbox} placeholder="문제의 정답을 입력하세요." />
+            <input
+              type="text"
+              css={inputbox}
+              placeholder="문제의 정답을 입력하세요."
+              onChange={handleAInput}
+            />
           </div>
         </div>
       </div>
       <div css={bottom} className="Bottom">
-        <Link to="/Nickname">
+        <Link to="/PlaceProvider">
           <button css={bottombtn}>다음으로</button>
         </Link>
       </div>

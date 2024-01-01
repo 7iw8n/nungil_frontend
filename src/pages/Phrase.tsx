@@ -1,5 +1,8 @@
 import { css } from '@emotion/react';
+import { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { PresentPlaceInfo } from '../states/presentMapState';
 import arrow from '../assets/imgs/ArrowLeft.png';
 
 const container = css`
@@ -79,6 +82,17 @@ const bottombtn = css`
 `;
 
 const Phrase = () => {
+  const [, setPresentPhrase] = useRecoilState(PresentPlaceInfo);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const updatedPhrase = event.target.value;
+    setPresentPhrase((prevPlaceInfo) => ({
+      ...prevPlaceInfo,
+      placeDescription: updatedPhrase,
+    }));
+  };
+
   return (
     <div css={container} className="Phrase">
       <div css={top} className="Top">
@@ -98,7 +112,12 @@ const Phrase = () => {
           <span>가벼운 이야기도 좋아요.</span>
         </div>
         <div className="Input">
-          <input type="text" css={inputbox} placeholder="이야기를 작성해주세요" />
+          <input
+            type="text"
+            css={inputbox}
+            placeholder="이야기를 작성해주세요"
+            onChange={handleInput}
+          />
         </div>
       </div>
       <div css={bottom} className="Bottom">

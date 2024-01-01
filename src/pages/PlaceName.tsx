@@ -1,5 +1,8 @@
 import { css } from '@emotion/react';
+import { useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { PresentPlaceInfo } from '../states/presentMapState';
 import arrow from '../assets/imgs/ArrowLeft.png';
 
 const container = css`
@@ -86,6 +89,17 @@ const bottombtn = css`
 `;
 
 const PlaceName = () => {
+  const [, setPresentPlaceName] = useRecoilState(PresentPlaceInfo);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const updatedPlaceName = event.target.value;
+    setPresentPlaceName((prevPlaceInfo) => ({
+      ...prevPlaceInfo,
+      placeName: updatedPlaceName,
+    }));
+  };
+
   return (
     <div css={container} className="PlaceName">
       <div css={top} className="Top">
@@ -104,7 +118,12 @@ const PlaceName = () => {
           <br />
           <span>ex. 숭실대 조만식기념관 옆 나무계단</span>
         </div>
-        <input type="text" css={inputbox} placeholder="장소의 이름을 입력하세요." />
+        <input
+          type="text"
+          css={inputbox}
+          placeholder="장소의 이름을 입력하세요."
+          onChange={handleInput}
+        />
         <br />
         <span css={detail}>*정해주신 장소의 이름이 지도 상에서 보이게 돼요.</span>
       </div>

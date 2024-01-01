@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { AddressState } from '../states/addressState';
 import MapContainer from '../components/MapContainer';
 import StartModal from '../components/StartModal';
 import add from '../assets/imgs/AddBox.png';
 import location from '../assets/imgs/Location.png';
+import presentpin from '../assets/imgs/PresentPin.png';
 
 const container = css`
   width: 393px;
@@ -82,6 +86,9 @@ const overlay = css`
 const MainPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [map, setMap] = useState<any>(null);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [marker, setMarker] = useState<any>(null);
+  const [, setAddress] = useRecoilState(AddressState);
 
   const handleAddBoxClick = () => {
     setModalOpen(true);
@@ -105,12 +112,88 @@ const MainPage = () => {
     }
   };
 
+  const handleAddressInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleAddressChange = () => {
+    if (marker) {
+      marker.setMap(null);
+    }
+
+    // 카카오맵 주소 검색 API 연동
+    if (inputValue.trim() !== '') {
+      const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
+        inputValue,
+      )}`;
+
+      if (window.kakao && window.kakao.maps) {
+        axios
+          .get(apiUrl, {
+            headers: {
+              Authorization: `KakaoAK ${import.meta.env.VITE_KAKAO_REST_API_KEY}`,
+            },
+          })
+          .then((response) => {
+            const data = response.data;
+            if (data && data.documents && data.documents.length > 0) {
+              const firstResult = data.documents[0];
+              if (firstResult.address) {
+                const { x, y } = firstResult.address;
+
+                // 검색된 주소의 좌표로 지도 이동
+                const centerPosition = new window.kakao.maps.LatLng(y, x);
+                map.setCenter(centerPosition);
+
+                const imageSrc = presentpin;
+                const imageSize = new window.kakao.maps.Size(35, 44); // 마커이미지의 크기입니다
+                const imageOption = { offset: new window.kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                const markerImage = new window.kakao.maps.MarkerImage(
+                  imageSrc,
+                  imageSize,
+                  imageOption,
+                );
+
+                const newMarkerPosition = centerPosition;
+                const newMarker = new window.kakao.maps.Marker({
+                  position: newMarkerPosition,
+                  image: markerImage,
+                });
+                newMarker.setMap(map);
+                setMarker(newMarker);
+
+                setAddress(inputValue);
+              } else {
+                console.error('주소를 찾을 수 없습니다.');
+              }
+            }
+          })
+          .catch((error) => {
+            console.error('API 요청 중 오류가 발생했습니다:', error);
+          });
+      }
+    }
+  };
+
+  const handleEnterKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleAddressChange(inputValue);
+    }
+  };
+
   return (
     <div className="Main">
       <div css={container} className="Container">
-        <MapContainer setMap={setMap} />
+        <MapContainer setMap={setMap} onAddressChange={handleAddressChange} />
         <div css={top} className="Top">
-          <input css={inputaddress} placeholder="주소를 입력하세요."></input>
+          <input
+            css={inputaddress}
+            placeholder="주소를 입력하세요."
+            value={inputValue}
+            onChange={handleAddressInputChange}
+            onKeyDown={handleEnterKeyPress}
+          ></input>
           <button css={locationbtn} onClick={handleLocationBtnClick}>
             <img src={location} />
           </button>

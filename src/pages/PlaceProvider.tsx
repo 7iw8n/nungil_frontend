@@ -1,6 +1,8 @@
-import { useState } from 'react';
 import { css } from '@emotion/react';
+import { useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { PresentPlaceInfo } from '../states/presentMapState';
 import FinishModal from '../components/FinishModal';
 import arrow from '../assets/imgs/ArrowLeft.png';
 
@@ -110,8 +112,18 @@ const overlay = css`
   z-index: 2;
 `;
 
-const Nickname = () => {
+const PlaceProvider = () => {
+  const [, setPresentPlaceProvider] = useRecoilState(PresentPlaceInfo);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const updatedPlaceProvider = event.target.value;
+    setPresentPlaceProvider((prevPlaceInfo) => ({
+      ...prevPlaceInfo,
+      placeProvider: updatedPlaceProvider,
+    }));
+  };
 
   const handleFinishClick = () => {
     setModalOpen(true);
@@ -139,7 +151,12 @@ const Nickname = () => {
           <br />
           <span>입력하신 닉네임은 타인에게 보이게 돼요.</span>
         </div>
-        <input type="text" css={inputbox} placeholder="닉네임을 입력하세요." />
+        <input
+          type="text"
+          css={inputbox}
+          placeholder="닉네임을 입력하세요."
+          onChange={handleInput}
+        />
         <br />
         <span css={detail}>*최대 8자까지</span>
       </div>
@@ -162,4 +179,4 @@ const Nickname = () => {
   );
 };
 
-export default Nickname;
+export default PlaceProvider;
