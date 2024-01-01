@@ -2,7 +2,7 @@ import { imgLinkShare } from '../../assets/imgs';
 import theme from '../../styles/theme';
 
 const LinkShare: React.FC<{ userId: number }> = ({ userId }) => {
-  const url = `http://localhost:5173/${userId}`;
+  const url = `https://nungil-front.vercel.app/${userId}`;
   //서버통신
 
   const handleCopyClipBoard = async () => {
