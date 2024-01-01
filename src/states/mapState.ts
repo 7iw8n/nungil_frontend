@@ -7,6 +7,7 @@ interface PlaceInfoType {
   longitude: number;
   placeId: number;
   placeName: string;
+  placeDescription: string;
   placeProvider: string;
 }
 
@@ -19,6 +20,7 @@ const PlaceInfo = atom<PlaceInfoType>({
     longitude: 0,
     placeId: 0,
     placeName: '',
+    placeDescription: '',
     placeProvider: '',
   }, // 기본값
 });

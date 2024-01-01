@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { IconLetter } from '../assets/svgs';
-import { useRecoilState } from 'recoil';
-import { ShowLetterAtom } from '../states/mapState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { PlaceInfo, ShowLetterAtom } from '../states/mapState';
 import { useRef, useEffect } from 'react';
 
 const ShowLetter = () => {
   const [, setIsShowLetter] = useRecoilState(ShowLetterAtom);
+  const { placeDescription, placeProvider } = useRecoilValue(PlaceInfo);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,11 +27,9 @@ const ShowLetter = () => {
       <St.LetterBox ref={modalRef}>
         <IconLetter />
         <p css={{ color: '#5B5B5B', fontSize: '1.4rem', flex: '1', marginTop: '1.7rem' }}>
-          여기 너랑 처음 갔던 곳인데 기억나? 그때 완전 좋았는데! 다음에 또 가고싶어😊
+          {placeDescription}
         </p>
-        <p css={{ marginBottom: '2rem', color: '#9B9B9B', fontSize: '1.2rem' }}>
-          슝슝이 · 2023년 11월 21일
-        </p>
+        <p css={{ marginBottom: '2rem', color: '#9B9B9B', fontSize: '1.2rem' }}>{placeProvider}</p>
       </St.LetterBox>
     </St.Container>
   );
