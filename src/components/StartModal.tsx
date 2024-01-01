@@ -100,24 +100,25 @@ const StartModal = ({ setModalOpen }: PropsType) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 이벤트 핸들러 함수
     const handler = (event: MouseEvent) => {
-      // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
+      // 모달 외부 영역 클릭 시 모달창 사라짐
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setModalOpen(false);
       }
     };
 
-    // 이벤트 핸들러 등록
     document.addEventListener('mousedown', handler);
-    // document.addEventListener('touchstart', handler); // 모바일 대응
+    // document.addEventListener('touchstart', handler); // 모바일 코드
 
     return () => {
-      // 이벤트 핸들러 해제
       document.removeEventListener('mousedown', handler);
-      // document.removeEventListener('touchstart', handler); // 모바일 대응
+      // document.removeEventListener('touchstart', handler); // 모바일 코드
     };
   }, [setModalOpen]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <div ref={modalRef} css={container} className="StartModal">
@@ -149,7 +150,9 @@ const StartModal = ({ setModalOpen }: PropsType) => {
           <Link to="/Map">
             <button css={bottombtn}>장소 선물 시작하기</button>
           </Link>
-          <button css={cancelbtn}>다음에 선물하기</button>
+          <button css={cancelbtn} onClick={closeModal}>
+            다음에 선물하기
+          </button>
         </div>
       </div>
     </div>
