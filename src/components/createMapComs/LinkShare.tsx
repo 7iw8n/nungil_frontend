@@ -1,8 +1,10 @@
 import { imgLinkShare } from '../../assets/imgs';
 import theme from '../../styles/theme';
 
+const NUNGILURL = import.meta.env.VITE_NUNGIL_URL;
+
 const LinkShare: React.FC<{ userId: number }> = ({ userId }) => {
-  const url = `https://nungil-front.vercel.app/${userId}`;
+  const url = `${NUNGILURL}/${userId}`;
   //서버통신
 
   const handleCopyClipBoard = async () => {
