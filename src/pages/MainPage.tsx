@@ -8,6 +8,7 @@ import MapContainer from '../components/MapContainer';
 import StartModal from '../components/StartModal';
 import add from '../assets/imgs/AddBox.png';
 import location from '../assets/imgs/Location.png';
+import BeginningModal from '../components/BeginningModal';
 import presentpin from '../assets/imgs/PresentPin.png';
 
 const container = css`
@@ -86,6 +87,7 @@ const overlay = css`
 const MainPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [map, setMap] = useState<any>(null);
+  const [showBeginningModal, setShowBeginningModal] = useState(true);
   const [inputValue, setInputValue] = useState<string>('');
   const [marker, setMarker] = useState<any>(null);
   const [, setAddress] = useRecoilState(AddressState);
@@ -211,6 +213,9 @@ const MainPage = () => {
             </>
           )}
         </div>
+        {showBeginningModal && (
+          <BeginningModal setShowModal={setShowBeginningModal} placeProvider="숭멋사" />
+        )}
       </div>
     </div>
   );
