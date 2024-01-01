@@ -22,6 +22,13 @@ const globalStyles = css`
     border: none;
     background: none;
   }
+  a {
+    text-decoration: none;
+  }
+  input {
+    border: none;
+    outline: none;
+  }
 `;
 
 export default globalStyles;

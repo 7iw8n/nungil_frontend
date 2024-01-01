@@ -1,6 +1,8 @@
 import { useRef, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { UserName, PlaceTheme } from '../states/createMapState';
 import box from '../assets/imgs/Box.png';
 
 const container = css`
@@ -25,6 +27,10 @@ const title = css`
   letter-spacing: -1px;
 `;
 
+const placethemespan = css`
+  color: #fa7268;
+`;
+
 const subtitle = css`
   color: #909090;
   padding-bottom: 34px;
@@ -35,11 +41,11 @@ const subtitle = css`
 `;
 
 const middletitle = css`
-padding-bottom: 9px;
-color: #505050
-font-size: 15px;
-font-weight: 700;
-letter-spacing: -0.5px;
+  padding-bottom: 9px;
+  color: #505050;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 `;
 
 const middlecon = css`
@@ -97,35 +103,39 @@ interface PropsType {
 }
 
 const StartModal = ({ setModalOpen }: PropsType) => {
+  const userName = useRecoilValue(UserName);
+  const placeTheme = useRecoilValue(PlaceTheme);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 이벤트 핸들러 함수
     const handler = (event: MouseEvent) => {
-      // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
+      // 모달 외부 영역 클릭 시 모달창 사라짐
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setModalOpen(false);
       }
     };
 
-    // 이벤트 핸들러 등록
     document.addEventListener('mousedown', handler);
-    // document.addEventListener('touchstart', handler); // 모바일 대응
+    // document.addEventListener('touchstart', handler); // 모바일 코드
 
     return () => {
-      // 이벤트 핸들러 해제
       document.removeEventListener('mousedown', handler);
-      // document.removeEventListener('touchstart', handler); // 모바일 대응
+      // document.removeEventListener('touchstart', handler); // 모바일 코드
     };
   }, [setModalOpen]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <div ref={modalRef} css={container} className="StartModal">
       <div css={top} className="Top">
         <div css={title} className="Title">
-          <span>님에게</span>
+          <span>{userName} 님에게</span>
           <br />
-          <span>를 선물하세요🎁</span>
+          <span css={placethemespan}>{placeTheme}</span>
+          <span> 을(를) 선물하세요🎁</span>
         </div>
         <div css={subtitle} className="Subtitle">
           <span>해당 테마에 어울리는 당신만의 장소를 선물하세요!</span>
@@ -140,7 +150,7 @@ const StartModal = ({ setModalOpen }: PropsType) => {
         <div css={middlecon} className="MiddleContent">
           <img src={box}></img>
           <div className="MiddleContentSpan">
-            <span css={middlecontop}>지금까지 님에게 선물된 장소는</span>
+            <span css={middlecontop}>지금까지 {userName} 님에게 선물된 장소는</span>
             <br />
             <span css={middleconbtm}>총 곳이에요!</span>
           </div>
@@ -149,7 +159,9 @@ const StartModal = ({ setModalOpen }: PropsType) => {
           <Link to="/Map">
             <button css={bottombtn}>장소 선물 시작하기</button>
           </Link>
-          <button css={cancelbtn}>다음에 선물하기</button>
+          <button css={cancelbtn} onClick={closeModal}>
+            다음에 선물하기
+          </button>
         </div>
       </div>
     </div>

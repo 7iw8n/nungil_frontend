@@ -1,6 +1,9 @@
 import { useRef, useEffect } from 'react';
 import { css } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { PresentPlaceInfo } from '../states/presentMapState';
+import { UserId } from '../states/userState';
 import box from '../assets/imgs/Box.png';
 
 const container = css`
@@ -53,7 +56,11 @@ interface PropsType {
 }
 
 const FinishModal = ({ setModalOpen }: PropsType) => {
+  const { placeProvider } = useRecoilValue(PresentPlaceInfo);
+  const userId = useRecoilValue(UserId);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const navigator = useNavigate();
 
   useEffect(() => {
     const handler = (event: MouseEvent) => {
@@ -72,6 +79,10 @@ const FinishModal = ({ setModalOpen }: PropsType) => {
     };
   }, [setModalOpen]);
 
+  const handleButtonClick = () => {
+    navigator(`/${userId}`);
+  };
+
   return (
     <div ref={modalRef} css={container} className="StartModal">
       <div css={top} className="Top"></div>
@@ -80,13 +91,13 @@ const FinishModal = ({ setModalOpen }: PropsType) => {
           <span>장소 선물 완료</span>
         </div>
         <div css={subtitle} className="Subtitle">
-          <span>님에게 전달 완료했어요.</span>
+          <span>{placeProvider} 님에게 전달 완료했어요.</span>
         </div>
       </div>
       <div css={bottom} className="bottom">
-        <Link to="/">
-          <button css={bottombtn}>확인</button>
-        </Link>
+        <button css={bottombtn} onClick={handleButtonClick}>
+          확인
+        </button>
       </div>
     </div>
   );

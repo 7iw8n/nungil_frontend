@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { css } from '@emotion/react';
-import basicpin from '../assets/imgs/BasicPin.png';
 
 declare global {
   interface Window {
@@ -11,6 +10,9 @@ declare global {
 interface MapContainerProps {
   onMapLoad: (map: any) => void;
   setMap: (map: any) => void;
+  onAddressChange: (address: string) => void;
+  map: any;
+  address: string;
 }
 
 const container = css`
@@ -18,14 +20,19 @@ const container = css`
   height: 100%;
 `;
 
-export default function MapContainer({ onMapLoad, setMap }: MapContainerProps) {
+export default function MapContainer({
+  onMapLoad,
+  setMap,
+  onAddressChange,
+  address,
+}: MapContainerProps) {
   useEffect(() => {
     const mapScript = document.createElement('script');
 
     mapScript.async = true;
     mapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
       import.meta.env.VITE_KAKAO_MAP_KEY
-    }&autoload=false`;
+    }&autoload=false&libraries=services`;
 
     document.head.appendChild(mapScript);
 
@@ -45,7 +52,7 @@ export default function MapContainer({ onMapLoad, setMap }: MapContainerProps) {
       });
     };
     mapScript.addEventListener('load', onLoadKakaoMap);
-  }, [onMapLoad, setMap]);
+  }, [onMapLoad, setMap, address]);
 
   return <div id="map" css={container} />;
 }

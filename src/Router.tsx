@@ -10,7 +10,7 @@ import PlaceName from './pages/PlaceName';
 import QuizA from './pages/QuizA';
 import QuizQ from './pages/QuizQ';
 import MainPage from './pages/MainPage';
-import Nickname from './pages/Nickname';
+import PlaceProvider from './pages/PlaceProvider';
 
 const Router = () => {
   return (
@@ -25,6 +25,7 @@ const Router = () => {
     >
       <div
         css={{
+          position: 'relative',
           width: '100vw',
           maxWidth: '450px',
           height: '100vh',
@@ -38,7 +39,7 @@ const Router = () => {
             <Route path="/PlaceName" element={<PlaceName />}></Route>
             <Route path="/QuizA" element={<QuizA />}></Route>
             <Route path="/QuizQ" element={<QuizQ />}></Route>
-            <Route path="/Nickname" element={<Nickname />}></Route>
+            <Route path="/PlaceProvider" element={<PlaceProvider />}></Route>
             <Route path="/:userId" element={<MainPage />}></Route>
             <Route path="/createMap" element={<CreateMapPage />} />
             {/* <Route path="/:userId" element={<Home />} /> */}
