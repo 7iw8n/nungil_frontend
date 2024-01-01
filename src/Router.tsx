@@ -20,23 +20,32 @@ const Router = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        minWidth: '360px',
       }}
     >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/Map" element={<Map />}></Route>
-          <Route path="/Phrase" element={<Phrase />}></Route>
-          <Route path="/PlaceName" element={<PlaceName />}></Route>
-          <Route path="/QuizA" element={<QuizA />}></Route>
-          <Route path="/QuizQ" element={<QuizQ />}></Route>
-          <Route path="/Nickname" element={<Nickname />}></Route>
-          <Route path="/:userId" element={<MainPage />}></Route>
-          <Route path="/createMap" element={<CreateMapPage />} />
-          {/* <Route path="/:userId" element={<Home />} /> */}
-          <Route path="/:userId/quiz/:placeId" element={<QuizPage />} />
-        </Routes>
-      </BrowserRouter>
+      <div
+        css={{
+          width: '100vw',
+          maxWidth: '450px',
+          height: '100vh',
+        }}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/Map" element={<Map />}></Route>
+            <Route path="/Phrase" element={<Phrase />}></Route>
+            <Route path="/PlaceName" element={<PlaceName />}></Route>
+            <Route path="/QuizA" element={<QuizA />}></Route>
+            <Route path="/QuizQ" element={<QuizQ />}></Route>
+            <Route path="/Nickname" element={<Nickname />}></Route>
+            <Route path="/:userId" element={<MainPage />}></Route>
+            <Route path="/createMap" element={<CreateMapPage />} />
+            {/* <Route path="/:userId" element={<Home />} /> */}
+            <Route path="/:userId/quiz/:placeId" element={<QuizPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </div>
   );
 };
