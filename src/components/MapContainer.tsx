@@ -11,7 +11,6 @@ interface MapContainerProps {
   onMapLoad: (map: any) => void;
   setMap: (map: any) => void;
   onAddressChange: (address: string) => void;
-  map: any;
   address: string;
 }
 

@@ -1,9 +1,12 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { PresentPlaceInfo } from '../states/presentMapState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { PresentPlaceInfo, PresentPlaceInfoType } from '../states/presentMapState';
+import { UserName } from '../states/createMapState.ts';
 import { UserId } from '../states/userState';
+import { PlaceId } from '../states/placeState';
+import { api } from '../apis/axiosInstance.ts';
 import box from '../assets/imgs/Box.png';
 
 const container = css`
@@ -51,13 +54,20 @@ const bottombtn = css`
   font-weight: 700;
 `;
 
+interface ApiResponse {
+  placeId: number;
+}
+
 interface PropsType {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FinishModal = ({ setModalOpen }: PropsType) => {
-  const { placeProvider } = useRecoilValue(PresentPlaceInfo);
+  const [placeInfo, setPlaceInfo] = useState<PresentPlaceInfoType | null>(null);
+  const presentPlaceInfo = useRecoilValue(PresentPlaceInfo);
   const userId = useRecoilValue(UserId);
+  const userName = useRecoilValue(UserName);
+  const [, setPlaceId] = useRecoilState(PlaceId);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const navigator = useNavigate();
@@ -79,7 +89,45 @@ const FinishModal = ({ setModalOpen }: PropsType) => {
     };
   }, [setModalOpen]);
 
-  const handleButtonClick = () => {
+  useEffect(() => {
+    if (presentPlaceInfo) {
+      const newPlaceInfo: PresentPlaceInfoType = {
+        address: presentPlaceInfo.address,
+        latitude: presentPlaceInfo.latitude,
+        longitude: presentPlaceInfo.longitude,
+        placeName: presentPlaceInfo.placeName,
+        placePasswd: '000000',
+        placeDescription: presentPlaceInfo.placeDescription,
+        placeProvider: presentPlaceInfo.placeProvider,
+        quiz: presentPlaceInfo.quiz,
+        quizAnswer: presentPlaceInfo.quizAnswer,
+      };
+      setPlaceInfo(newPlaceInfo);
+    }
+  }, []);
+
+  const postPlaceInfo = async () => {
+    if (!placeInfo) {
+      console.error('위치 정보가 아직 불러와지지 않았습니다.');
+      return;
+    }
+
+    const dataToSend = {
+      ...placeInfo,
+      userId: userId,
+    };
+
+    console.log(dataToSend);
+
+    try {
+      const { data } = await api.post<ApiResponse>('/api/place/register', dataToSend);
+      const { placeId } = data;
+      setPlaceId(placeId);
+    } catch {}
+  };
+
+  const handleButtonClick = async () => {
+    await postPlaceInfo();
     navigator(`/${userId}`);
   };
 
@@ -91,7 +139,7 @@ const FinishModal = ({ setModalOpen }: PropsType) => {
           <span>장소 선물 완료</span>
         </div>
         <div css={subtitle} className="Subtitle">
-          <span>{placeProvider} 님에게 전달 완료했어요.</span>
+          <span>{userName} 님에게 전달 완료했어요.</span>
         </div>
       </div>
       <div css={bottom} className="bottom">

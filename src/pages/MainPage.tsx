@@ -3,7 +3,7 @@ import axios from 'axios';
 import { css } from '@emotion/react';
 import { Link, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { AddressState } from '../states/addressState';
+import { PresentPlaceInfo, PresentPlaceInfoType } from '../states/presentMapState';
 import MapContainer from '../components/MapContainer';
 import StartModal from '../components/StartModal';
 import add from '../assets/imgs/AddBox.png';
@@ -114,7 +114,8 @@ const MainPage = () => {
   const [showBeginningModal, setShowBeginningModal] = useState(true);
   const [inputValue, setInputValue] = useState<string>('');
   const [marker, setMarker] = useState<any>(null);
-  const [, setAddress] = useRecoilState(AddressState);
+  const [presentMarkers, setPresentMarkers] = useState<any[]>([]);
+  const [addressInfo, setAddressInfo] = useRecoilState(PresentPlaceInfo);
   const { userId } = useParams();
   const [placeList, setPlaceList] = useState<PlaceInfoType[]>([]);
   const [count, setCount] = useState(0);
@@ -174,6 +175,15 @@ const MainPage = () => {
               if (firstResult.address) {
                 const { x, y } = firstResult.address;
 
+                setAddressInfo((prev) => ({
+                  ...prev,
+                  address: inputValue,
+                  latitude: y,
+                  longitude: x,
+                }));
+
+                console.log(addressInfo);
+
                 // 검색된 주소의 좌표로 지도 이동
                 const centerPosition = new window.kakao.maps.LatLng(y, x);
                 map.setCenter(centerPosition);
@@ -195,8 +205,6 @@ const MainPage = () => {
                 });
                 newMarker.setMap(map);
                 setMarker(newMarker);
-
-                setAddress(inputValue);
               } else {
                 console.error('주소를 찾을 수 없습니다.');
               }

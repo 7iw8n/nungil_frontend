@@ -59,6 +59,7 @@ const inputbox = css`
   border-radius: 10px;
   border: 1px solid #f1f1f1;
   background: #fafafa;
+  font-size: 1.4rem;
 `;
 
 const bottom = css`

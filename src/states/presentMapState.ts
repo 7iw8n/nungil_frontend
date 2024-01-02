@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-interface PresentPlaceInfoType {
+export interface PresentPlaceInfoType {
   address: string;
   latitude: number;
   longitude: number;
@@ -12,7 +12,7 @@ interface PresentPlaceInfoType {
   quizAnswer: string;
 }
 
-const PresentPlaceInfo = atom<PresentPlaceInfoType>({
+export const PresentPlaceInfo = atom<PresentPlaceInfoType>({
   key: 'PresentPlaceInfo',
   default: {
     address: '',
@@ -26,5 +26,3 @@ const PresentPlaceInfo = atom<PresentPlaceInfoType>({
     quizAnswer: '',
   },
 });
-
-export { PresentPlaceInfo };
