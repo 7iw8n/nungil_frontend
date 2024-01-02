@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { css } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { AddressState } from '../states/addressState';
 import MapContainer from '../components/MapContainer';
@@ -10,6 +10,12 @@ import add from '../assets/imgs/AddBox.png';
 import location from '../assets/imgs/Location.png';
 import BeginningModal from '../components/BeginningModal';
 import presentpin from '../assets/imgs/PresentPin.png';
+import { api } from '../apis/axiosInstance';
+import { PlaceInfo, PlaceInfoType, ShowLetterAtom } from '../states/mapState';
+import { IconMarker } from '../assets/svgs';
+import styled from '@emotion/styled';
+import ShowQuizModal from '../components/ShowQuizModal';
+import ShowLetter from '../components/ShowLetter';
 
 const container = css`
   width: 393px;
@@ -52,6 +58,24 @@ const locationbtn = css`
   z-index: 2;
 `;
 
+const CountBox = styled.div`
+  width: 6.7rem;
+  height: 3.2rem;
+  border-radius: 20px;
+  background-color: #303030;
+  position: absolute;
+  bottom: 90px;
+  right: 15px;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.3rem;
+  gap: 0.6rem;
+  cursor: pointer;
+`;
+
 const addbox = css`
   width: 60px;
   height: 60px;
@@ -91,6 +115,13 @@ const MainPage = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [marker, setMarker] = useState<any>(null);
   const [, setAddress] = useRecoilState(AddressState);
+  const { userId } = useParams();
+  const [placeList, setPlaceList] = useState<PlaceInfoType[]>([]);
+  const [count, setCount] = useState(0);
+  const [, setPlaceInfo] = useRecoilState(PlaceInfo);
+  const [placeId, setPlaceId] = useState(0);
+  const [isShowQuiz, setIsShowQuiz] = useState(0);
+  const [isShowLetter, setIsShowLetter] = useRecoilState(ShowLetterAtom);
 
   const handleAddBoxClick = () => {
     setModalOpen(true);
@@ -184,6 +215,67 @@ const MainPage = () => {
     }
   };
 
+  useEffect(() => {
+    getPlaces();
+    getPlaceCount();
+    if (window.kakao && window.kakao.maps && map) {
+      placeList.forEach((place) => {
+        const coords = new window.kakao.maps.LatLng(place.latitude, place.longitude);
+
+        // 이미지 URL을 사용하여 마커 이미지를 생성
+        const markerImage = new window.kakao.maps.MarkerImage(
+          '/imgMarker.png',
+          new window.kakao.maps.Size(20, 30), // 이미지 크기 지정
+        );
+
+        // 마커 생성 및 이미지 설정
+        const marker = new window.kakao.maps.Marker({
+          position: coords,
+          image: markerImage, // 마커에 이미지 설정
+        });
+        // 마커 객체에 metadata로 placeId를 추가
+        marker.metadata = { placeId: place.placeId };
+
+        // 마커에 클릭 이벤트 리스너를 추가
+        window.kakao.maps.event.addListener(marker, 'click', (e) => {
+          // 클릭한 마커의 placeId를 처리합
+          console.log(place.placeId);
+          setPlaceId(place.placeId);
+          setPlaceInfo(place);
+          clickMarker();
+        });
+
+        // 지도에 마커를 표시합니다.
+        marker.setMap(map);
+      });
+    }
+  }, [map]); // map이 변경될 때마다 마커를 업데이트
+
+  //서버 api 연동
+  const getPlaces = async () => {
+    try {
+      const { data } = await api.get(`/api/user/${userId}/places`);
+      setPlaceList(data);
+      console.log(data);
+    } catch {}
+  };
+
+  const getPlaceCount = async () => {
+    try {
+      const { data } = await api.get(`/api/user/${userId}/places/count`);
+      setCount(data);
+    } catch {}
+  };
+
+  //핀 클릭 했을 때
+  const clickMarker = () => {
+    console.log('click');
+    if (placeId === 0) return;
+    const bool = placeList.find((place) => place.placeId === placeId)?.isQuiz;
+    bool ? setIsShowQuiz(1) : setIsShowLetter(true);
+    console.log(isShowQuiz);
+  };
+
   return (
     <div className="Main">
       <div css={container} className="Container">
@@ -200,6 +292,10 @@ const MainPage = () => {
             <img src={location} />
           </button>
         </div>
+        <CountBox>
+          <IconMarker />
+          {count}개
+        </CountBox>
         <button onClick={handleAddBoxClick}>
           <img css={addbox} src={add} />
         </button>
@@ -213,8 +309,15 @@ const MainPage = () => {
             </>
           )}
         </div>
-        {showBeginningModal && (
-          <BeginningModal setShowModal={setShowBeginningModal} placeProvider="숭멋사" />
+        {showBeginningModal && !isShowLetter && (
+          <BeginningModal setShowModal={setShowBeginningModal} />
+        )}
+        {isShowQuiz === 1 ? (
+          <ShowQuizModal placeId={placeId} />
+        ) : isShowLetter ? (
+          <ShowLetter />
+        ) : (
+          <></>
         )}
       </div>
     </div>
