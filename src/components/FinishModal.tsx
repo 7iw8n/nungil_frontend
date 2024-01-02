@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { PresentPlaceInfo, PresentPlaceInfoType } from '../states/presentMapState';
+import { UserName } from '../states/createMapState.ts';
 import { UserId } from '../states/userState';
 import { PlaceId } from '../states/placeState';
 import { api } from '../apis/axiosInstance.ts';
@@ -65,6 +66,7 @@ const FinishModal = ({ setModalOpen }: PropsType) => {
   const [placeInfo, setPlaceInfo] = useState<PresentPlaceInfoType | null>(null);
   const presentPlaceInfo = useRecoilValue(PresentPlaceInfo);
   const userId = useRecoilValue(UserId);
+  const userName = useRecoilValue(UserName);
   const [, setPlaceId] = useRecoilState(PlaceId);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -137,7 +139,7 @@ const FinishModal = ({ setModalOpen }: PropsType) => {
           <span>장소 선물 완료</span>
         </div>
         <div css={subtitle} className="Subtitle">
-          <span>{presentPlaceInfo.placeProvider} 님에게 전달 완료했어요.</span>
+          <span>{userName} 님에게 전달 완료했어요.</span>
         </div>
       </div>
       <div css={bottom} className="bottom">

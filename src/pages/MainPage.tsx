@@ -116,7 +116,6 @@ const MainPage = () => {
   const [marker, setMarker] = useState<any>(null);
   const [presentMarkers, setPresentMarkers] = useState<any[]>([]);
   const [addressInfo, setAddressInfo] = useRecoilState(PresentPlaceInfo);
-  const [, setAddress] = useRecoilState(AddressState);
   const { userId } = useParams();
   const [placeList, setPlaceList] = useState<PlaceInfoType[]>([]);
   const [count, setCount] = useState(0);

@@ -85,6 +85,10 @@ const addresscon = css`
   border: none;
   border-radius: 10px;
   background: #fafafa;
+  color: #909090;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
 `;
 
 const bottombtn = css`
@@ -193,7 +197,7 @@ const Map = () => {
           <span>내가 선물할 장소의 주소는 여기예요!</span>
         </div>
         <div css={addressbox} className="AddressBox">
-          <input css={addresscon}></input>
+          <span css={addresscon}>{presentPlaceInfo.address}</span>
         </div>
         <div className="BottomBtn">
           <Link to="/PlaceName">

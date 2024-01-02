@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { useState, ChangeEvent } from 'react';
+import { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { PresentPlaceInfo } from '../states/presentMapState';
 import arrow from '../assets/imgs/ArrowLeft.png';
 
@@ -59,12 +59,13 @@ const inputbox = css`
   border-radius: 10px;
   border: 1px solid #f1f1f1;
   background: #fafafa;
+  font-size: 1.4rem;
 `;
 
 const detail = css`
   color: #909090;
   font-family: Pretendard;
-  font-size: 11px;
+  font-size: 1.1rem;
   font-weight: 500;
 `;
 
@@ -84,7 +85,7 @@ const bottombtn = css`
   background: #fa7268;
   color: #ffffff;
   text-align: center;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 700;
 `;
 
@@ -94,7 +95,7 @@ const PlaceName = () => {
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const updatedPlaceName = event.target.value;
-    setPresentPlaceName((prevPlaceInfo) => ({
+    setPresentPlaceName((prevPlaceInfo: any) => ({
       ...prevPlaceInfo,
       placeName: updatedPlaceName,
     }));
