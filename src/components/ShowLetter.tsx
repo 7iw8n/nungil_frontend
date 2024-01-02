@@ -47,6 +47,7 @@ const St = {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 4;
   `,
   LetterBox: styled.div`
     position: absolute;

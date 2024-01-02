@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { imgNungil } from '../assets/imgs';
+import { imgLanding, imgNungil } from '../assets/imgs';
 import styled from '@emotion/styled';
 
 const LandingPage = () => {
@@ -14,9 +14,10 @@ const LandingPage = () => {
   return (
     <div
       css={{
+        position: 'relative',
         backgroundColor: '#FA7268',
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -25,6 +26,10 @@ const LandingPage = () => {
       <img css={{ width: '12rem', marginTop: '12rem' }} src={imgNungil} alt="로고" />
       <Intro>눈길 닿는 곳곳으로</Intro>
       <Intro>선물하는 추억</Intro>
+      <img
+        css={{ height: '55%', maxWidth: '450px', position: 'absolute', bottom: '0px', right: '0' }}
+        src={imgLanding}
+      />
     </div>
   );
 };
