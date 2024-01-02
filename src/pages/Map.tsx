@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import axios from 'axios';
-import { AddressState } from '../states/addressState';
+import { useRecoilValue } from 'recoil';
+import { PresentPlaceInfo } from '../states/presentMapState';
 import MapContainer from '../components/MapContainer';
 import arrow from '../assets/imgs/ArrowLeft.png';
 import presentpin from '../assets/imgs/PresentPin.png';
@@ -108,14 +108,14 @@ declare global {
 }
 
 const Map = () => {
-  const address = useRecoilValue(AddressState);
+  const presentPlaceInfo = useRecoilValue(PresentPlaceInfo);
   const [map, setMap] = useState<any>(null);
   const [, setMarker] = useState<any>(null);
 
   useEffect(() => {
-    if (map && address) {
+    if (map && presentPlaceInfo.address) {
       const apiUrl = `https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(
-        address,
+        presentPlaceInfo.address,
       )}`;
 
       axios
@@ -130,6 +130,8 @@ const Map = () => {
             const firstResult = data.documents[0];
             if (firstResult.address) {
               const { x, y } = firstResult.address;
+
+              console.log(presentPlaceInfo.address);
 
               // 검색한 주소의 좌표로 지도 이동
               const centerPosition = new window.kakao.maps.LatLng(y, x);
@@ -163,7 +165,7 @@ const Map = () => {
           console.error('API 요청 중 오류가 발생했습니다:', error);
         });
     }
-  }, [map, address]);
+  }, [map, presentPlaceInfo.address]);
 
   const handleMapLoad = (mapInstance: any) => {
     setMap(mapInstance);
@@ -180,7 +182,11 @@ const Map = () => {
         <span css={title}>주소 지정하기</span>
       </div>
       <div css={middle} className="Middle">
-        <MapContainer onMapLoad={handleMapLoad} map={map} address={address} />
+        <MapContainer
+          onMapLoad={handleMapLoad}
+          setMap={setMap}
+          address={presentPlaceInfo.address}
+        />
       </div>
       <div css={bottom} className="Bottom">
         <div css={bottomtitle} className="BottomTile">
