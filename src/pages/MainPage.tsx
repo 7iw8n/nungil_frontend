@@ -239,7 +239,6 @@ const MainPage = () => {
         // 마커에 클릭 이벤트 리스너를 추가
         window.kakao.maps.event.addListener(marker, 'click', (e) => {
           // 클릭한 마커의 placeId를 처리합
-          console.log(place.placeId);
           setPlaceId(place.placeId);
           setPlaceInfo(place);
           clickMarker();
@@ -268,13 +267,24 @@ const MainPage = () => {
   };
 
   //핀 클릭 했을 때
+  useEffect(() => {
+    clickMarker();
+  }, [placeId, isShowLetter]);
   const clickMarker = () => {
-    console.log('click');
     if (placeId === 0) return;
     const bool = placeList.find((place) => place.placeId === placeId)?.isQuiz;
-    bool ? setIsShowQuiz(1) : setIsShowLetter(true);
-    console.log(isShowQuiz);
+    if (bool) {
+      setIsShowQuiz(1);
+      setIsShowLetter(false);
+    } else {
+      setIsShowLetter(true);
+      setIsShowQuiz(0);
+    }
   };
+
+  useEffect(() => {
+    console.log(`isShowQuiz: ${isShowQuiz}, isShowLetter: ${isShowLetter}`);
+  }, [isShowQuiz, isShowLetter]);
 
   return (
     <div className="Main">
@@ -316,9 +326,7 @@ const MainPage = () => {
           <ShowQuizModal placeId={placeId} />
         ) : isShowLetter ? (
           <ShowLetter />
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
     </div>
   );
