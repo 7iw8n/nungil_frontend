@@ -19,8 +19,7 @@ const BeginningModal = ({ setShowModal, placeProvider }: any) => {
           }}
         >
           <p>
-            당신의 <span css={{ color: '#FA7268' }}>소소한 여행지</span>를
-            <span css={{ color: '#FA7268' }}> {placeProvider}</span> 님에게 선물하세요!
+            당신의 <span css={{ color: '#FA7268' }}>소소한 여행지</span> 를 선물하세요!
           </p>
           <p>위치를 추가하고, 짤막한 이야기로 추억을 나눌 수 있어요</p>
         </div>

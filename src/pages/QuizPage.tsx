@@ -38,6 +38,7 @@ const QuizPage = () => {
     try {
       const { data } = await api.get(`/api/user/places/${placeId}/quiz`);
       setQuizInfo(data);
+      console.log(data);
     } catch {
       (err: ErrorEvent) => {
         console.log(err);

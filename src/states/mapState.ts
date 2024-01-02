@@ -35,4 +35,4 @@ const ShowLetterAtom = atom({
   default: false,
 });
 
-export { PlaceInfo, ShowQuizModalAtom, ShowLetterAtom };
+export { PlaceInfo, PlaceInfoType, ShowQuizModalAtom, ShowLetterAtom };
