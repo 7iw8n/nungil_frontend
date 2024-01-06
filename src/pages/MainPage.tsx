@@ -18,7 +18,7 @@ import ShowQuizModal from '../components/ShowQuizModal';
 import ShowLetter from '../components/ShowLetter';
 
 const container = css`
-  width: 393px;
+  width: 100%;
   height: 100vh;
   background: #ffffff;
   z-index: 1;
