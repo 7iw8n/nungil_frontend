@@ -11,11 +11,18 @@ import location from '../assets/imgs/Location.png';
 import BeginningModal from '../components/BeginningModal';
 import presentpin from '../assets/imgs/PresentPin.png';
 import { api } from '../apis/axiosInstance';
-import { PlaceInfo, PlaceInfoType, ShowLetterAtom } from '../states/mapState';
+import {
+  PlaceInfo,
+  PlaceInfoType,
+  ShowBeginModalAtom,
+  ShowLetterAtom,
+  ShowQuizModalAtom,
+} from '../states/mapState';
 import { IconMarker } from '../assets/svgs';
 import styled from '@emotion/styled';
 import ShowQuizModal from '../components/ShowQuizModal';
 import ShowLetter from '../components/ShowLetter';
+import { useGeoLocation } from '../hooks/useGeoLocation';
 
 const container = css`
   width: 100%;
@@ -111,7 +118,7 @@ const overlay = css`
 const MainPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [map, setMap] = useState<any>(null);
-  const [showBeginningModal, setShowBeginningModal] = useState(true);
+  const [showBeginningModal, setShowBeginningModal] = useRecoilState(ShowBeginModalAtom);
   const [inputValue, setInputValue] = useState<string>('');
   const [marker, setMarker] = useState<any>(null);
   const [presentMarkers, setPresentMarkers] = useState<any[]>([]);
@@ -121,8 +128,14 @@ const MainPage = () => {
   const [count, setCount] = useState(0);
   const [, setPlaceInfo] = useRecoilState(PlaceInfo);
   const [placeId, setPlaceId] = useState(0);
-  const [isShowQuiz, setIsShowQuiz] = useState(0);
+  const [isShowQuiz, setIsShowQuiz] = useRecoilState(ShowQuizModalAtom);
   const [isShowLetter, setIsShowLetter] = useRecoilState(ShowLetterAtom);
+  const geolocationOptions = {
+    enableHighAccuracy: true,
+    timeout: 1000,
+    maximumAge: 1000 * 3600 * 24,
+  };
+  const { location, error } = useGeoLocation(geolocationOptions);
 
   const handleAddBoxClick = () => {
     setModalOpen(true);
@@ -227,33 +240,58 @@ const MainPage = () => {
     getPlaces();
     getPlaceCount();
     if (window.kakao && window.kakao.maps && map) {
-      placeList.forEach((place) => {
-        const coords = new window.kakao.maps.LatLng(place.latitude, place.longitude);
+      // 사용자의 현재 위치를 얻는 함수
+      const getCurrentLocation = (callback) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const currentLocation = new window.kakao.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude,
+              );
+              callback(currentLocation);
+            },
+            (error) => {
+              console.error('Geolocation error:', error);
+              // 위치 정보를 얻을 수 없는 경우에 대한 처리
+            },
+          );
+        } else {
+          console.error('Geolocation is not supported by this browser.');
+          // 브라우저에서 Geolocation을 지원하지 않는 경우에 대한 처리
+        }
+      };
+      getCurrentLocation((currentLocation) => {
+        map.setCenter(currentLocation);
 
-        // 이미지 URL을 사용하여 마커 이미지를 생성
-        const markerImage = new window.kakao.maps.MarkerImage(
-          '/imgMarker.png',
-          new window.kakao.maps.Size(20, 30), // 이미지 크기 지정
-        );
+        placeList.forEach((place) => {
+          const coords = new window.kakao.maps.LatLng(place.latitude, place.longitude);
 
-        // 마커 생성 및 이미지 설정
-        const marker = new window.kakao.maps.Marker({
-          position: coords,
-          image: markerImage, // 마커에 이미지 설정
+          // 이미지 URL을 사용하여 마커 이미지를 생성
+          const markerImage = new window.kakao.maps.MarkerImage(
+            '/imgMarker.png',
+            new window.kakao.maps.Size(20, 30), // 이미지 크기 지정
+          );
+
+          // 마커 생성 및 이미지 설정
+          const marker = new window.kakao.maps.Marker({
+            position: coords,
+            image: markerImage, // 마커에 이미지 설정
+          });
+          // 마커 객체에 metadata로 placeId를 추가
+          marker.metadata = { placeId: place.placeId };
+
+          // 마커에 클릭 이벤트 리스너를 추가
+          window.kakao.maps.event.addListener(marker, 'click', (e) => {
+            // 클릭한 마커의 placeId를 처리합
+            setPlaceId(place.placeId);
+            setPlaceInfo(place);
+            clickMarker();
+          });
+
+          // 지도에 마커를 표시합니다.
+          marker.setMap(map);
         });
-        // 마커 객체에 metadata로 placeId를 추가
-        marker.metadata = { placeId: place.placeId };
-
-        // 마커에 클릭 이벤트 리스너를 추가
-        window.kakao.maps.event.addListener(marker, 'click', (e) => {
-          // 클릭한 마커의 placeId를 처리합
-          setPlaceId(place.placeId);
-          setPlaceInfo(place);
-          clickMarker();
-        });
-
-        // 지도에 마커를 표시합니다.
-        marker.setMap(map);
       });
     }
   }, [map]); // map이 변경될 때마다 마커를 업데이트
@@ -289,10 +327,6 @@ const MainPage = () => {
       setIsShowQuiz(0);
     }
   };
-
-  useEffect(() => {
-    console.log(`isShowQuiz: ${isShowQuiz}, isShowLetter: ${isShowLetter}`);
-  }, [isShowQuiz, isShowLetter]);
 
   return (
     <div className="Main">
