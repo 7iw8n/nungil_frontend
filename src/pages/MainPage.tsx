@@ -7,7 +7,7 @@ import { PresentPlaceInfo, PresentPlaceInfoType } from '../states/presentMapStat
 import MapContainer from '../components/MapContainer';
 import StartModal from '../components/StartModal';
 import add from '../assets/imgs/AddBox.png';
-import location from '../assets/imgs/Location.png';
+import locationimg from '../assets/imgs/Location.png';
 import BeginningModal from '../components/BeginningModal';
 import presentpin from '../assets/imgs/PresentPin.png';
 import { api } from '../apis/axiosInstance';
@@ -25,6 +25,9 @@ import ShowLetter from '../components/ShowLetter';
 import { useGeoLocation } from '../hooks/useGeoLocation';
 
 const container = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   height: 100vh;
   background: #ffffff;
@@ -33,33 +36,35 @@ const container = css`
 `;
 
 const top = css`
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: start;
 `;
 
 const inputaddress = css`
-  width: 301px;
-  height: 45px;
+  width: 77%;
+  height: 4.6rem;
   border-radius: 10px;
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 2rem;
+  left: 1.5rem;
   z-index: 2;
   color: #505050;
   padding-left: 19px;
-  font-size: 15px;
+  font-size: 1.5rem;
   font-weight: 600;
 `;
 
 const locationbtn = css`
-  width: 45px;
-  height: 45px;
+  width: 4.6rem;
+  height: 4.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 20px;
-  left: 330px;
+  top: 2rem;
+  right: 2rem;
   background-color: #262626;
   border-radius: 10px;
   z-index: 2;
@@ -71,9 +76,9 @@ const CountBox = styled.div`
   border-radius: 20px;
   background-color: #303030;
   position: absolute;
-  bottom: 90px;
-  right: 15px;
-  z-index: 1;
+  bottom: 9rem;
+  right: 1.5rem;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,20 +89,21 @@ const CountBox = styled.div`
 `;
 
 const addbox = css`
-  width: 60px;
-  height: 60px;
+  width: 6rem;
+  height: 6rem;
   flex-shrink: 0;
   filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.09))
     drop-shadow(0px 10px 6px rgba(0, 0, 0, 0.05)) drop-shadow(0px 18px 7px rgba(0, 0, 0, 0.01))
     drop-shadow(0px 28px 8px rgba(0, 0, 0, 0));
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 1.8rem;
+  right: 1.8rem;
   z-index: 1;
   cursor: pointer;
 `;
 
 const modalbox = css`
+  width: 100%;
   position: absolute;
   bottom: 0;
   z-index: 3;
@@ -110,7 +116,7 @@ const overlay = css`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
 `;
@@ -121,7 +127,6 @@ const MainPage = () => {
   const [showBeginningModal, setShowBeginningModal] = useRecoilState(ShowBeginModalAtom);
   const [inputValue, setInputValue] = useState<string>('');
   const [marker, setMarker] = useState<any>(null);
-  const [presentMarkers, setPresentMarkers] = useState<any[]>([]);
   const [addressInfo, setAddressInfo] = useRecoilState(PresentPlaceInfo);
   const { userId } = useParams();
   const [placeList, setPlaceList] = useState<PlaceInfoType[]>([]);
@@ -329,47 +334,45 @@ const MainPage = () => {
   };
 
   return (
-    <div className="Main">
-      <div css={container} className="Container">
-        <MapContainer setMap={setMap} onAddressChange={handleAddressChange} />
-        <div css={top} className="Top">
-          <input
-            css={inputaddress}
-            placeholder="주소를 입력하세요."
-            value={inputValue}
-            onChange={handleAddressInputChange}
-            onKeyDown={handleEnterKeyPress}
-          ></input>
-          <button css={locationbtn} onClick={handleLocationBtnClick}>
-            <img src={location} />
-          </button>
-        </div>
-        <CountBox>
-          <IconMarker />
-          {count}개
-        </CountBox>
-        <button onClick={handleAddBoxClick}>
-          <img css={addbox} src={add} />
+    <div css={container} className="Container">
+      <MapContainer setMap={setMap} onAddressChange={handleAddressChange} />
+      <div css={top} className="Top">
+        <input
+          css={inputaddress}
+          placeholder="주소를 입력하세요."
+          value={inputValue}
+          onChange={handleAddressInputChange}
+          onKeyDown={handleEnterKeyPress}
+        ></input>
+        <button css={locationbtn} onClick={handleLocationBtnClick}>
+          <img src={locationimg} />
         </button>
-        <div className="Modal">
-          {modalOpen && (
-            <>
-              <div css={overlay} onClick={closeModal} />
-              <div css={modalbox} className="ModalBox">
-                <StartModal setModalOpen={setModalOpen} />
-              </div>
-            </>
-          )}
-        </div>
-        {showBeginningModal && !isShowLetter && (
-          <BeginningModal setShowModal={setShowBeginningModal} />
-        )}
-        {isShowQuiz === 1 ? (
-          <ShowQuizModal placeId={placeId} />
-        ) : isShowLetter ? (
-          <ShowLetter />
-        ) : null}
       </div>
+      <CountBox>
+        <IconMarker />
+        {count}개
+      </CountBox>
+      <button onClick={handleAddBoxClick}>
+        <img css={addbox} src={add} />
+      </button>
+      <div className="Modal">
+        {modalOpen && (
+          <>
+            <div css={overlay} onClick={closeModal} />
+            <div css={modalbox} className="ModalBox">
+              <StartModal setModalOpen={setModalOpen} />
+            </div>
+          </>
+        )}
+      </div>
+      {showBeginningModal && !isShowLetter && (
+        <BeginningModal setShowModal={setShowBeginningModal} />
+      )}
+      {isShowQuiz === 1 ? (
+        <ShowQuizModal placeId={placeId} />
+      ) : isShowLetter ? (
+        <ShowLetter />
+      ) : null}
     </div>
   );
 };

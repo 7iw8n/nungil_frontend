@@ -6,8 +6,11 @@ import { UserName, PlaceTheme } from '../states/createMapState';
 import box from '../assets/imgs/Box.png';
 
 const container = css`
-  width: 393px;
-  padding-left: 28px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const top = css`
