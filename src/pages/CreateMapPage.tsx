@@ -134,7 +134,7 @@ const St = {
     height: 100vh;
     padding: 2.7rem;
     gap: 3.8rem;
-    background: #000000;
+    background: #ffffff;
     font-family: Pretendard;
   `,
   TopSection: styled.div`
