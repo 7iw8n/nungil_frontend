@@ -6,60 +6,67 @@ import { PresentPlaceInfo } from '../states/presentMapState';
 import arrow from '../assets/imgs/ArrowLeft.png';
 
 const container = css`
-  width: 393px;
+  width: 100%;
   height: 100vh;
   background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.7rem;
+  gap: 3.8rem;
 `;
 
 const top = css`
-  height: 8%;
   display: flex;
-  flex-direction: column;
 `;
 
 const backbtn = css`
-  width: 24px;
-  height: 24px;
-  padding-top: 21px;
-  padding-left: 21px;
+  width: 2.4rem;
+  height: 2.4rem;
   text-align: center;
-  background: #ffffff;
 `;
 
 const middle = css`
-  height: 81%;
-  padding-top: 31px;
-  padding-left: 29px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: start;
+  padding: 0.8rem;
 `;
 
 const title = css`
+  font-family: Pretendard;
   color: #262626;
-  padding-bottom: 17px;
-  font-size: 24px;
+  padding-bottom: 1.7rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -0.1rem;
 `;
 
 const subtitle = css`
+  font-family: Pretendard;
   color: #909090;
-  padding-bottom: 25px;
-  font-size: 14px;
-  font-weight: 600;
+  padding-bottom: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1.5;
   letter-spacing: -0.5px;
 `;
 
 const inputbox = css`
   display: flex;
-  width: 338px;
-  height: 45px;
-  padding: 8px 16px;
+  width: 100%;
+  height: 4.5rem;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  justify-content: center;
   align-items: center;
   gap: 10px;
   border-radius: 10px;
   border: 1px solid #f1f1f1;
   background: #fafafa;
   font-size: 1.4rem;
+  font-family: Pretendard;
+  line-height: normal;
 `;
 
 const detail = css`
@@ -70,15 +77,15 @@ const detail = css`
 `;
 
 const bottom = css`
-  height: 11%;
-  padding-left: 28px;
-  padding-bottom: 27px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const bottombtn = css`
   display: flex;
-  width: 338px;
-  height: 45px;
+  width: 33.8rem;
+  height: 4.5rem;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
@@ -86,7 +93,7 @@ const bottombtn = css`
   color: #ffffff;
   text-align: center;
   font-size: 1.4rem;
-  font-weight: 700;
+  font-family: Pretendard;
 `;
 
 const PlaceName = () => {

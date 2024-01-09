@@ -10,8 +10,8 @@ import { api } from '../apis/axiosInstance.ts';
 import box from '../assets/imgs/Box.png';
 
 const container = css`
-  width: 235px;
-  height: 169px;
+  width: 23.5rem;
+  height: 16.9rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,6 +19,7 @@ const container = css`
   flex-shrink: 0;
   border-radius: 26px;
   background-color: #ffffff;
+  font-family: Pretendard;
 `;
 
 const top = css``;
@@ -28,7 +29,7 @@ const middle = css``;
 const title = css`
   color: #262626;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.8rem;
   font-weight: 700;
   padding-bottom: 7px;
 `;
@@ -36,20 +37,20 @@ const title = css`
 const subtitle = css`
   color: #9b9b9b;
   text-align: center;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 600;
-  padding-bottom: 35px;
+  padding-bottom: 3.5rem;
 `;
 
 const bottom = css`
-  padding-bottom: 20px;
+  padding-bottom: 2rem;
 `;
 
 const bottombtn = css`
   background-color: #ffffff;
   color: #fa7268;
   text-align: center;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-style: normal;
   font-weight: 700;
 `;

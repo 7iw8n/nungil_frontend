@@ -134,6 +134,8 @@ const St = {
     height: 100vh;
     padding: 2.7rem;
     gap: 3.8rem;
+    background: #000000;
+    font-family: Pretendard;
   `,
   TopSection: styled.div`
     display: flex;
@@ -164,7 +166,6 @@ const St = {
     font-family: Pretendard;
     font-size: 1.4rem;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
   `,
 };
@@ -191,12 +192,13 @@ const M = {
   `,
   Title: styled.p`
     color: #262626;
-    font-family: Preten dard;
+    font-family: Pretendard;
     font-size: 2.4rem;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
     letter-spacing: -0.3px;
+    padding-bottom: 1.7rem;
   `,
   Explain: styled.div`
     color: #909090;
@@ -205,6 +207,6 @@ const M = {
     font-style: normal;
     line-height: 1.8rem;
     letter-spacing: -0.3px;
-    margin-bottom: 1.2rem;
+    padding-bottom: 1.6rem;
   `,
 };

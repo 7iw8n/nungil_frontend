@@ -46,6 +46,7 @@ const St = {
     justify-content: center;
     align-items: center;
     z-index: 3;
+    font-family: Pretendard;
   `,
   Modal: styled.div`
     width: 35rem;
@@ -87,7 +88,6 @@ const St = {
     font-family: Pretendard;
     font-size: 1.4rem;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
   `,
 };

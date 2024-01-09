@@ -20,7 +20,6 @@ const InputPlaceTheme = () => {
         gap: '0.8rem',
         color: '#909090',
         fontSize: '1.6rem',
-        fontWeight: '600',
         marginTop: '3.2rem',
       }}
     >

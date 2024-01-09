@@ -16,7 +16,11 @@ interface MapContainerProps {
 
 const container = css`
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default function MapContainer({
@@ -51,7 +55,7 @@ export default function MapContainer({
       });
     };
     mapScript.addEventListener('load', onLoadKakaoMap);
-  }, [onMapLoad, setMap, address]);
+  }, [onMapLoad, address, setMap]);
 
   return <div id="map" css={container} />;
 }
