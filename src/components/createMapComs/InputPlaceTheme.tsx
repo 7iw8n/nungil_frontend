@@ -37,6 +37,7 @@ export default InputPlaceTheme;
 
 const St = {
   Input: styled.input`
+    width: 60%;
     border: none;
     border-bottom: 1.5px solid #909090;
     padding: 0.5rem 0.8rem;
