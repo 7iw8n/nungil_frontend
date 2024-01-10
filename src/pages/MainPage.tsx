@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { css } from '@emotion/react';
 import { Link, useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { PresentPlaceInfo, PresentPlaceInfoType } from '../states/presentMapState';
+import { UserId } from '../states/userState.ts';
+import { UserName, PlaceTheme } from '../states/createMapState.ts';
 import MapContainer from '../components/MapContainer';
 import StartModal from '../components/StartModal';
 import add from '../assets/imgs/AddBox.png';
@@ -128,10 +130,11 @@ const MainPage = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [marker, setMarker] = useState<any>(null);
   const [addressInfo, setAddressInfo] = useRecoilState(PresentPlaceInfo);
-  const { userId } = useParams();
   const [placeList, setPlaceList] = useState<PlaceInfoType[]>([]);
-  const [placeTheme, setPlaceTheme] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
+  const [, setUserId] = useRecoilState(UserId);
+  const [, setUserName] = useRecoilState(UserName);
+  const [, setPlaceTheme] = useRecoilState(PlaceTheme);
+  const { userId } = useParams();
   const [count, setCount] = useState<number>(0);
   const [, setPlaceInfo] = useRecoilState(PlaceInfo);
   const [placeId, setPlaceId] = useState(0);
@@ -246,20 +249,11 @@ const MainPage = () => {
   useEffect(() => {
     console.log('userId is ', userId);
 
-    const getInfoAndPlaceCount = async (userId: any) => {
-      try {
-        const { data } = await api.get(`/api/user/${userId}/places/info`);
-        setCount(data.placeCount);
-        setUserName(data.userName);
-        setPlaceTheme(data.placeTheme);
-      } catch (error) {
-        console.error('API 요청 중 오류가 발생했습니다:', error);
-      }
-    };
-
-    getPlaces();
     if (userId) {
+      getPlaces();
       getInfoAndPlaceCount(userId);
+      setUserId(parseInt(userId));
+      console.log(userId);
     }
     if (window.kakao && window.kakao.maps && map) {
       // 사용자의 현재 위치를 얻는 함수
@@ -318,13 +312,23 @@ const MainPage = () => {
     }
   }, [map, userId]); // map이 변경될 때마다 마커를 업데이트
 
-  //서버 api 연동
   const getPlaces = async () => {
     try {
       const { data } = await api.get(`/api/user/${userId}/places`);
       setPlaceList(data);
       console.log(data);
     } catch {}
+  };
+
+  const getInfoAndPlaceCount = async (userId: any) => {
+    try {
+      const { data } = await api.get(`/api/user/${userId}/places/info`);
+      setCount(data.placeCount);
+      setUserName(data.userName);
+      setPlaceTheme(data.placeTheme);
+    } catch (error) {
+      console.error('API 요청 중 오류가 발생했습니다:', error);
+    }
   };
 
   //핀 클릭 했을 때
@@ -370,12 +374,7 @@ const MainPage = () => {
           <>
             <div css={overlay} onClick={closeModal} />
             <div css={modalbox} className="ModalBox">
-              <StartModal
-                setModalOpen={setModalOpen}
-                count={count}
-                userName={userName}
-                placeTheme={placeTheme}
-              />
+              <StartModal setModalOpen={setModalOpen} count={count} />
             </div>
           </>
         )}

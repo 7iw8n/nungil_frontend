@@ -58,7 +58,6 @@ const bottombtn = css`
 interface ApiResponse {
   placeId: number;
 }
-
 interface PropsType {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }

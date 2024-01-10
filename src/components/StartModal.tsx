@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useRef, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import box from '../assets/imgs/Box.png';
+import { useRecoilValue } from 'recoil';
+import { UserName, PlaceTheme } from '../states/createMapState';
 
 const container = css`
   width: 100%;
@@ -113,11 +115,11 @@ const cancelbtn = css`
 interface PropsType {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   count: number;
-  userName: string;
-  placeTheme: string;
 }
 
-const StartModal = ({ setModalOpen, count, userName, placeTheme }: PropsType) => {
+const StartModal = ({ setModalOpen, count }: PropsType) => {
+  const userName = useRecoilValue(UserName);
+  const placeTheme = useRecoilValue(PlaceTheme);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
