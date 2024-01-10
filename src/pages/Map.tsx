@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { css } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
+import { UserId } from '../states/userState';
 import { PresentPlaceInfo } from '../states/presentMapState';
 import MapContainer from '../components/MapContainer';
 import arrow from '../assets/imgs/ArrowLeft.png';
@@ -118,6 +119,8 @@ declare global {
 }
 
 const Map = () => {
+  const navigator = useNavigate();
+  const userId = useRecoilValue(UserId);
   const presentPlaceInfo = useRecoilValue(PresentPlaceInfo);
   const [map, setMap] = useState<any>(null);
 
@@ -150,15 +153,17 @@ const Map = () => {
     }
   }, [map, presentPlaceInfo]);
 
+  const handleButtonClick = () => {
+    navigator(`/${userId}`);
+  };
+
   return (
     <div css={container} className="Map">
       <MapContainer onMapLoad={handleMapLoad} setMap={setMap} />
       <div css={top} className="Top">
-        <Link to="/MainPage">
-          <button css={backbtn}>
-            <img src={arrow} />
-          </button>
-        </Link>
+        <button css={backbtn} onClick={handleButtonClick}>
+          <img src={arrow} />
+        </button>
         <span css={title}>주소 지정하기</span>
       </div>
       <div css={bottom} className="Bottom">
