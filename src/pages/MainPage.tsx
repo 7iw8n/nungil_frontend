@@ -130,7 +130,9 @@ const MainPage = () => {
   const [addressInfo, setAddressInfo] = useRecoilState(PresentPlaceInfo);
   const { userId } = useParams();
   const [placeList, setPlaceList] = useState<PlaceInfoType[]>([]);
-  const [count, setCount] = useState(0);
+  const [placeTheme, setPlaceTheme] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
+  const [count, setCount] = useState<number>(0);
   const [, setPlaceInfo] = useRecoilState(PlaceInfo);
   const [placeId, setPlaceId] = useState(0);
   const [isShowQuiz, setIsShowQuiz] = useRecoilState(ShowQuizModalAtom);
@@ -242,8 +244,23 @@ const MainPage = () => {
   };
 
   useEffect(() => {
+    console.log('userId is ', userId);
+
+    const getInfoAndPlaceCount = async (userId: any) => {
+      try {
+        const { data } = await api.get(`/api/user/${userId}/places/info`);
+        setCount(data.placeCount);
+        setUserName(data.userName);
+        setPlaceTheme(data.placeTheme);
+      } catch (error) {
+        console.error('API 요청 중 오류가 발생했습니다:', error);
+      }
+    };
+
     getPlaces();
-    getPlaceCount();
+    if (userId) {
+      getInfoAndPlaceCount(userId);
+    }
     if (window.kakao && window.kakao.maps && map) {
       // 사용자의 현재 위치를 얻는 함수
       const getCurrentLocation = (callback) => {
@@ -299,7 +316,7 @@ const MainPage = () => {
         });
       });
     }
-  }, [map]); // map이 변경될 때마다 마커를 업데이트
+  }, [map, userId]); // map이 변경될 때마다 마커를 업데이트
 
   //서버 api 연동
   const getPlaces = async () => {
@@ -307,13 +324,6 @@ const MainPage = () => {
       const { data } = await api.get(`/api/user/${userId}/places`);
       setPlaceList(data);
       console.log(data);
-    } catch {}
-  };
-
-  const getPlaceCount = async () => {
-    try {
-      const { data } = await api.get(`/api/user/${userId}/places/count`);
-      setCount(data);
     } catch {}
   };
 
@@ -360,7 +370,12 @@ const MainPage = () => {
           <>
             <div css={overlay} onClick={closeModal} />
             <div css={modalbox} className="ModalBox">
-              <StartModal setModalOpen={setModalOpen} />
+              <StartModal
+                setModalOpen={setModalOpen}
+                count={count}
+                userName={userName}
+                placeTheme={placeTheme}
+              />
             </div>
           </>
         )}

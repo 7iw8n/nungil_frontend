@@ -9,18 +9,22 @@ import arrow from '../assets/imgs/ArrowLeft.png';
 import presentpin from '../assets/imgs/PresentPin.png';
 
 const container = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   height: 100vh;
   background: #ffffff;
-  position: relative;
   z-index: 1;
+  position: relative;
 `;
 
 const top = css`
+  width: 100%;
   height: 6.1rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   flex-shrink: 0;
   gap: 20px;
