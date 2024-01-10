@@ -76,6 +76,8 @@ const CreateMapPage = () => {
       const { userId } = data;
       setUserId(userId);
       setStage(stage + 1);
+
+      console.log(userId);
     } catch {}
   };
 
